@@ -1,5 +1,11 @@
 # Adafruit GFX Library ![Build Status](https://github.com/adafruit/Adafruit-GFX-Library/workflows/Arduino%20Library%20CI/badge.svg)
 
+NOTE: This is a stripped version of the Adafruit GFX Arduino library, made for the CH32V003 to use graphics on LCD or LED Matrix displays.
+To reduce flash usage the following modifications were made:
+ - only use the lower half of the standard ASCII font (chars 0x00-0x7F)
+ - disable support for custom fonts
+ - disable use of Adafruit I2C/SPI interfaces (derived classes require their own interface)
+
 This is the core graphics library for all our displays, providing a common set of graphics primitives (points, lines, circles, etc.). It needs to be paired with a hardware-specific library for each display device we carry (to handle the lower-level functions).
 
 Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!

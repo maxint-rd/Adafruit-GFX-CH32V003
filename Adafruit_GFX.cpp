@@ -1143,8 +1143,15 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
         ((y + 8 * size_y - 1) < 0))   // Clip top
       return;
 
+#if !defined(CH32V00x)  // no room for large font on CH32, only 7bit ASCII 0x00-0x7F
     if (!_cp437 && (c >= 176))
       c++; // Handle 'classic' charset behavior
+#else
+// No room for large font on CH32, only 7bit ASCII 0x00-0x7F
+// 128 bitmaps is only 640 bytes instead of 1280 for 256 bitmaps
+// see https://learn.adafruit.com/adafruit-gfx-graphics-library/graphics-primitives
+    if(c>0x7F) c=0x7F;
+#endif // #if !defined(CH32V00x)  // no room for large font on CH32, only 7bit ASCII 0x00-0x7F
 
     startWrite();
     for (int8_t i = 0; i < 5; i++) { // Char bitmap = 5 columns
@@ -1173,7 +1180,7 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
     endWrite();
 
   } else { // Custom font
-
+#if !defined(CH32V00x)  // no room for custom fonts on CH32, only the classic font
     // Character is assumed previously filtered by write() to eliminate
     // newlines, returns, non-printable characters, etc.  Calling
     // drawChar() directly with 'bad' characters of font may cause mayhem!
@@ -1230,7 +1237,7 @@ void Adafruit_GFX::drawChar(int16_t x, int16_t y, unsigned char c,
       }
     }
     endWrite();
-
+#endif // #if !defined(CH32V00x)  // no room for custom fonts on CH32, only the classic font
   } // End classic vs custom font
 }
 /**************************************************************************/
@@ -1256,7 +1263,7 @@ size_t Adafruit_GFX::write(uint8_t c) {
     }
 
   } else { // Custom font
-
+#if !defined(CH32V00x)  // no room for custom fonts on CH32, only the classic font
     if (c == '\n') {
       cursor_x = 0;
       cursor_y +=
@@ -1281,6 +1288,7 @@ size_t Adafruit_GFX::write(uint8_t c) {
             (uint8_t)pgm_read_byte(&glyph->xAdvance) * (int16_t)textsize_x;
       }
     }
+#endif // #if !defined(CH32V00x)  // no room for custom fonts on CH32, only the classic font
   }
   return 1;
 }

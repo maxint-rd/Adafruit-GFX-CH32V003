@@ -9,8 +9,10 @@
 #endif
 #include "gfxfont.h"
 
+#if !defined(CH32V00x)  // no direct SPI support on CH32, only mxUnifiedIO
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_SPIDevice.h>
+#endif // #if !defined(CH32V00x)  // no direct SPI support on CH32, only mxUnifiedIO
 
 /// A generic graphics superclass that can handle all sorts of drawing. At a
 /// minimum you can subclass and provide drawPixel(). At a maximum you can do a
